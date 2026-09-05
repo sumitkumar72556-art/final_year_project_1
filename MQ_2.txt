@@ -1,0 +1,35 @@
+#define MQ2_PIN 32
+
+void setup() {
+  Serial.begin(115200);
+
+  // ESP32 ADC settings
+  analogReadResolution(12);              // 0 - 4095
+  analogSetPinAttenuation(MQ2_PIN, ADC_11db);
+
+  Serial.println("================================");
+  Serial.println(" SMART MINE WORKER SAFETY SYSTEM ");
+  Serial.println(" MQ-2 GAS SENSOR TEST ");
+  Serial.println("================================");
+  Serial.println("MQ-2 warming up...");
+  delay(5000);   // Sensor warm-up
+}
+
+void loop() {
+  int gasValue = analogRead(MQ2_PIN);
+
+  Serial.print("MQ-2 Gas Value : ");
+  Serial.print(gasValue);
+
+  if (gasValue < 300) {
+    Serial.println("   SAFE");
+  }
+  else if (gasValue < 800) {
+    Serial.println("   WARNING");
+  }
+  else {
+    Serial.println("   DANGER! GAS DETECTED");
+  }
+
+  delay(1000);
+}
