@@ -1,57 +1,49 @@
-// AI Smart Mine Worker - MQ2 + MQ7 Test
-
 #define MQ2_PIN 32
 #define MQ7_PIN 35
+#define BUZZER_PIN 25
+#define LED_PIN 26
 
 void setup() {
   Serial.begin(115200);
 
-  // ESP32 ADC Configuration
-  analogReadResolution(12);               // Range: 0-4095
+  analogReadResolution(12);
   analogSetPinAttenuation(MQ2_PIN, ADC_11db);
   analogSetPinAttenuation(MQ7_PIN, ADC_11db);
 
-  Serial.println("====================================");
-  Serial.println(" SMART MINE WORKER SAFETY SYSTEM");
-  Serial.println(" MQ-2 + MQ-7 GAS MONITOR");
-  Serial.println("====================================");
-  Serial.println("Warming up sensors (20 seconds)...");
+  pinMode(BUZZER_PIN, OUTPUT);
+  pinMode(LED_PIN, OUTPUT);
 
-  delay(20000);   // Warm-up MQ sensors
+  digitalWrite(BUZZER_PIN, LOW);
+  digitalWrite(LED_PIN, LOW);
 
-  Serial.println("Sensors Ready!\n");
+  Serial.println("SMART MINE WORKER SAFETY SYSTEM");
+  Serial.println("Warming up sensors for 20 seconds...");
+  delay(20000);   // MQ sensors need warm-up
 }
 
 void loop() {
+  int mq2 = analogRead(MQ2_PIN);
+  int mq7 = analogRead(MQ7_PIN);
 
-  int mq2Value = analogRead(MQ2_PIN);
-  int mq7Value = analogRead(MQ7_PIN);
+  Serial.println("----------------------------");
+  Serial.print("MQ-2: ");
+  Serial.println(mq2);
 
-  Serial.println("------------------------------------");
+  Serial.print("MQ-7: ");
+  Serial.println(mq7);
 
-  // MQ-2 Status
-  Serial.print("MQ-2 (Smoke/LPG): ");
-  Serial.print(mq2Value);
-  Serial.print("  Status: ");
+  if (mq2 >= 1200 || mq7 >= 1000) {
+    Serial.println("*** DANGER! GAS DETECTED ***");
 
-  if (mq2Value < 600)
+    digitalWrite(LED_PIN, HIGH);
+    digitalWrite(BUZZER_PIN, HIGH);
+  }
+  else {
     Serial.println("SAFE");
-  else if (mq2Value < 1200)
-    Serial.println("WARNING");
-  else
-    Serial.println("DANGER");
 
-  // MQ-7 Status
-  Serial.print("MQ-7 (CO Gas):   ");
-  Serial.print(mq7Value);
-  Serial.print("  Status: ");
-
-  if (mq7Value < 500)
-    Serial.println("SAFE");
-  else if (mq7Value < 1000)
-    Serial.println("WARNING");
-  else
-    Serial.println("DANGER");
+    digitalWrite(LED_PIN, LOW);
+    digitalWrite(BUZZER_PIN, LOW);
+  }
 
   delay(1000);
 }
