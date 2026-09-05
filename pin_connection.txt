@@ -1,0 +1,15 @@
+Pin Summary
+
+MQ-2
+ESP32
+VCC	VIN (5V)
+GND	GND
+AO	GPIO32 through voltage divider
+
+
+MQ-7
+ESP32
+VCC	VIN (5V)
+GND	GND
+AO	GPIO35 through voltage divider
+
