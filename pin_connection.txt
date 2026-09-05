@@ -1,15 +1,27 @@
 Pin Summary
 
-MQ-2
+i)MQ-2
 ESP32
 VCC	VIN (5V)
 GND	GND
 AO	GPIO32 through voltage divider
 
 
-MQ-7
+ii)MQ-7
 ESP32
 VCC	VIN (5V)
 GND	GND
 AO	GPIO35 through voltage divider
 
+iii)Led and Buzzer connection
+Connection Table
+
+            ESP32 Pin
+Buzzer (+)	GPIO25
+Buzzer (−)	GND
+
+Red LED Anode (+)	
+GPIO26 through 220Ω resistor
+
+
+Red LED Cathode (−)	GND
